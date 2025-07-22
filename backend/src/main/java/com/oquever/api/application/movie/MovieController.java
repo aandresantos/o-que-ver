@@ -1,4 +1,4 @@
-package com.oquever.api.controller;
+package com.oquever.api.application.movie;
 
 import java.util.Optional;
 
@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.oquever.api.domain.service.MovieService;
 import com.oquever.api.infrastructure.client.dto.OmdbMovieDTO;
 
 @RestController
@@ -21,11 +20,18 @@ public class MovieController {
         this.movieService = movieService;
     }
 
+    // TODO:
+    // criar validacao para parametros
+    // garantir retonro estruturado
+    // permitir a request com um body passando os tipos de filme e o que a pessoa
+    // está afim de assistir no dia
     @GetMapping("/{title}")
-    public ResponseEntity<OmdbMovieDTO> getMovieByTitle(@PathVariable String title) {
-        Optional<OmdbMovieDTO> movieOpt = movieService.findMovieByTitle(title);
+    public String getMovieByTitle(@PathVariable String title) {
+        // Optional<OmdbMovieDTO> movieOpt = movieService.findMovieByTitle(title);
 
-        return movieOpt.map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return "funciona";
+
+        // movieOpt.map(ResponseEntity::ok)
+        // .orElse(ResponseEntity.notFound().build());
     }
 }
