@@ -1,24 +1,26 @@
 package com.oquever.api.infrastructure.client;
 
-import java.lang.StackWalker.Option;
-import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
-import com.oquever.api.domain.ports.MovieClientPort;
 import com.oquever.api.infrastructure.client.dto.OmdbMovieDTO;
 
-// implements MovieClientPort 
-
+@Component
 public class OmdbClient {
+  private static final Logger log = LoggerFactory.getLogger(OmdbClient.class);
+
   private final RestTemplate restTemplate;
 
-  @Value("${omdb.api.omdbUrlAddress}")
+  @Value("${spring.api.omdbUrlAddress}")
   private String omdbUrlAddress;
 
-  @Value("${omdb.api.omdbApiKey}")
+  @Value("${spring.api.omdbApiKey}")
   private String omdbApiKey;
 
   public OmdbClient(RestTemplate restTemplate) {
@@ -26,7 +28,10 @@ public class OmdbClient {
   }
 
   public Optional<OmdbMovieDTO> findByTitle(String title) {
-    String url = String.format("s%?t=%s&apikey%s", omdbUrlAddress, title, omdbApiKey);
+    String url = UriComponentsBuilder.fromUriString(omdbUrlAddress)
+        .queryParam("t", title)
+        .queryParam("apikey", omdbApiKey)
+        .toUriString();
 
     try {
       OmdbMovieDTO movie = restTemplate.getForObject(url, OmdbMovieDTO.class);
@@ -36,8 +41,8 @@ public class OmdbClient {
       }
 
       return Optional.of(movie);
-    } catch (Exception e) {
-      // TODO: implementar o logger aqui também
+    } catch (Exception err) {
+      log.error("[OmdbClient]: Erro na comunicação com OMDB API. Error: {}", err.getMessage());
 
       return Optional.empty();
     }
