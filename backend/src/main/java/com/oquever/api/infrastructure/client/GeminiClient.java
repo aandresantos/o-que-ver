@@ -18,6 +18,8 @@ public class GeminiClient {
 
       GenerateContentResponse response = client.models.generateContent("gemini-1.5-flash", Content.fromParts(
           Part.fromText("me retorna 50 filmes com " + text)),
+          // criar o prompt para garantir sempre o retorno
+          // criar o retry para garantir o retorno caso falhe
           null);
 
       System.out.print(response.text());
