@@ -10,12 +10,12 @@ import com.oquever.api.infrastructure.client.GeminiClient;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MovieService implements MoviePort {
+public class MovieUseCase implements MoviePort {
 
     private final OmdbClient omdbClient;
     private final GeminiClient geminiClient;
 
-    public MovieService(OmdbClient omdbClient, GeminiClient geminiClient) {
+    public MovieUseCase(OmdbClient omdbClient, GeminiClient geminiClient) {
         this.omdbClient = omdbClient;
         this.geminiClient = geminiClient;
     }
